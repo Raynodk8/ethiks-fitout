@@ -282,7 +282,7 @@ footer .legal { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.1)
 .brand span { border-left-color: var(--green); }
 .nav a[aria-current="page"] { border-bottom-color: var(--green); }
 ul.points li::before { border-color: var(--green); }
-.facts { border-top: 3px solid var(--green); }
+.facts { border-top: 3px solid var(--stone); }
 .roles { border-top-color: var(--green); border-top-width: 3px; }
 .steps li { border-top: 3px solid var(--green); }
 form.card { border-top-color: var(--green); }
