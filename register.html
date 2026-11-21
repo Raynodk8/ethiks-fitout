@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/styles.css?v=27">
+<link rel="stylesheet" href="/styles.css?v=28">
 <link rel="icon" href="/assets/ethiks-logo.png">
 </head>
 <body>
@@ -31,25 +31,21 @@
   <nav class="nav" aria-label="Main"><a href="/">Home</a><a href="/fit-out.html">Shopfitting</a><a href="/residential.html">Joinery</a><a href="/projects.html">Projects</a><a href="/about-us.html">About</a><a class="btn" href="/contact-us.html">Get a quote</a></nav>
 </div></header>
 <section class="phead plain"><div class="in">
-  <div class="copy"><span class="eyebrow">For tradespeople</span><h1>Register to work with us</h1><p>Shopfitters, joiners and dry liners: leave your details and trade, and we will be in touch when we have work that fits.</p></div>
+  <div class="copy"><span class="eyebrow">For tradespeople</span><h1>Register to work with us</h1><p>Shopfitters, joiners, dry liners and site managers: register once on UrProject and we can put you forward for our work.</p></div>
   
 </div></section><main id="main">
 <section class="sec"><div class="in two">
   <div>
-    <h2>What we ask for</h2>
-    <ul class="points"><li>Your name and how to reach you</li><li>Your trade</li><li>Your CSCS card number, if you have one</li></ul>
-    <p class="small">We use your details to contact you about work with Ethiks. See our <a href="/privacy-policy.html">privacy policy</a>.</p>
+    <h2>What you will need</h2>
+    <ul class="points"><li>Your name and how to reach you</li><li>Your trade or role</li><li>Your CSCS card, if you have one</li></ul>
   </div>
-  <form class="card" id="request" data-form="register" novalidate>
-    <h2>Your details</h2>
-    <label>Full name<input id="r-name" name="name" autocomplete="name" required></label>
-    <label>Mobile<input id="r-phone" name="mobile" type="tel" autocomplete="tel" required></label>
-    <label class="full">Email<input id="r-email" name="email" type="email" autocomplete="email" required></label>
-    <label>Trade<input id="r-trade" name="trade" required></label>
-    <label>CSCS number<input id="r-cscs" name="cscs_number"></label>
-    <label class="full">Town or postcode<input id="r-town" name="town" autocomplete="address-level2"></label>
-    <div class="full"><button class="btn" type="submit">Register</button></div>
-    <p class="full msg" role="status" hidden></p>
+  <form class="card" id="request" action="https://www.urproject.co.uk/signup/workforce" method="get">
+    <h2>Register on UrProject</h2>
+    <p class="full">All our labour, trades and managers, is registered through UrProject, our sister company's platform. Create your free profile there and we will be in touch when we have work that fits.</p>
+    <input type="hidden" name="utm_source" value="ethiks-fitout">
+    <input type="hidden" name="utm_medium" value="referral">
+    <div class="full"><button class="btn" type="submit">Register on UrProject</button></div>
+    <p class="full small">You register with UrProject Ltd. Its privacy policy applies.</p>
   </form>
 </div></section>
 </main>
@@ -63,6 +59,6 @@
   </div>
 </footer>
 <div class="lb" role="dialog" aria-modal="true" aria-label="Photo" hidden><button class="x" aria-label="Close">×</button><button class="prev" aria-label="Previous photo">←</button><img alt=""><button class="next" aria-label="Next photo">→</button><p></p></div>
-<script src="/main.js?v=27" defer></script>
+<script src="/main.js?v=28" defer></script>
 </body>
 </html>
