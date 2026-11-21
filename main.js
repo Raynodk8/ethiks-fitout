@@ -71,6 +71,15 @@ var CALM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: redu
   document.addEventListener('keydown', function (e) { if (lb.hidden) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') move(-1); if (e.key === 'ArrowRight') move(1); });
 })();
 
+// phone menu: the button top right opens and closes the page links
+(function () {
+  var head = document.querySelector('.head'), btn = document.querySelector('.menu'), nav = document.getElementById('nav');
+  if (!head || !btn || !nav) return;
+  head.classList.add('has-menu');
+  btn.addEventListener('click', function () { var open = nav.classList.toggle('open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+  nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); } });
+})();
+
 // project filters
 (function () {
   var buttons = document.querySelectorAll('.filters button');
