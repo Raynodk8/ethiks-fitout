@@ -1,6 +1,6 @@
 // Ethiks Fit-out. FORM_ENDPOINT is where enquiries are posted as JSON.
-// While it is empty, a form opens the visitor's own email app addressed to info@ethiks.co.uk.
-var FORM_ENDPOINT = '';
+// It points at the Zapier workflow "Ethiks website forms to email", which emails each form to the matching Ethiks inbox.
+var FORM_ENDPOINT = 'https://hooks.zapier.com/hooks/catch/25369631/8KvtTZa0at3Oadt9/';
 var CALM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // hero slideshow: crossfade every few seconds; the labels jump to a photo
@@ -115,7 +115,9 @@ document.querySelectorAll('form[data-form]').forEach(function (form) {
     var data = { form: kind, page: location.pathname };
     new FormData(form).forEach(function (v, k) { data[k] = v; });
     var button = form.querySelector('button'); button.disabled = true;
-    fetch(FORM_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) })
+    // Sent as an ordinary form post, so the browser needs no permission check first.
+    var body = new URLSearchParams(); Object.keys(data).forEach(function (k) { body.append(k, data[k]); });
+    fetch(FORM_ENDPOINT, { method: 'POST', body: body })
       .then(function (r) { if (!r.ok) throw new Error('send failed'); form.reset(); show('Thank you. We have your details and will be in touch.'); })
       .catch(function () { show('Sorry, that did not send. Please try again in a moment.', true); })
       .then(function () { button.disabled = false; });
