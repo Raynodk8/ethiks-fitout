@@ -274,7 +274,7 @@ footer .legal { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.1)
 .pitch .acts .btn { font-size: 0.86rem; font-weight: 700; line-height: 1.2; padding: 12px 22px; text-shadow: none; }
 
 /* ---------- green lines: stone carries the words and buttons, green marks the lines ---------- */
-.edge { background: var(--green); }
+.edge { background: var(--stone); }
 .eyebrow::before { background: var(--green); width: 34px; height: 3px; }
 .ticks li::before { background: var(--green); }
 .dots button::after { background: var(--green); }
