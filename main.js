@@ -1,13 +1,47 @@
 // Ethiks Fit-out. FORM_ENDPOINT is where enquiries are posted as JSON.
 // While it is empty, a form opens the visitor's own email app addressed to info@ethiks.co.uk.
 var FORM_ENDPOINT = '';
+var CALM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// scroll rule: the green datum reads the scroll position, 1px to 1mm
+// hero slideshow: crossfade every few seconds; the labels jump to a photo
 (function () {
-  var out = document.querySelector('.rule span');
-  if (!out) return;
-  function read() { out.textContent = ('0000' + Math.round(window.scrollY)).slice(-5) + ' mm'; }
-  read(); window.addEventListener('scroll', read, { passive: true });
+  var figs = document.querySelectorAll('.slides figure'), dots = document.querySelectorAll('.dots button');
+  if (figs.length < 2) return;
+  var i = 0, ms = 6000, timer;
+  document.querySelector('.hero2').style.setProperty('--slide-ms', ms + 'ms');
+  function show(n) {
+    figs[i].classList.remove('on'); dots[i].classList.remove('on');
+    i = (n + figs.length) % figs.length;
+    figs[i].classList.add('on'); void dots[i].offsetWidth; dots[i].classList.add('on');
+  }
+  function play() { clearInterval(timer); if (!CALM) timer = setInterval(function () { show(i + 1); }, ms); }
+  dots.forEach(function (d, n) { d.addEventListener('click', function () { show(n); play(); }); });
+  document.addEventListener('visibilitychange', function () { if (document.hidden) clearInterval(timer); else play(); });
+  play();
+})();
+
+// service panels: the one under the pointer (or focus) opens
+(function () {
+  var panels = document.querySelectorAll('.panel');
+  panels.forEach(function (p) {
+    function open() { panels.forEach(function (o) { o.classList.toggle('on', o === p); }); }
+    p.addEventListener('mouseenter', open); p.addEventListener('focus', open);
+  });
+})();
+
+// count up a number when it scrolls into view
+(function () {
+  var els = document.querySelectorAll('[data-count]');
+  if (CALM || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (items) {
+    items.forEach(function (it) {
+      if (!it.isIntersecting) return; io.unobserve(it.target);
+      var el = it.target, end = +el.getAttribute('data-count'), start = end - 60, t0 = null;
+      function step(t) { if (!t0) t0 = t; var k = Math.min(1, (t - t0) / 1100); el.textContent = Math.round(start + (end - start) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); }
+      requestAnimationFrame(step);
+    });
+  }, { threshold: 0.6 });
+  els.forEach(function (e) { io.observe(e); });
 })();
 
 // reveal sections as they come into view
@@ -18,14 +52,24 @@ var FORM_ENDPOINT = '';
   els.forEach(function (e) { io.observe(e); });
 })();
 
-// drag the photo strip sideways with the mouse
-document.querySelectorAll('.strip').forEach(function (s) {
-  var down = false, x0 = 0, l0 = 0;
-  s.addEventListener('mousedown', function (e) { down = true; x0 = e.pageX; l0 = s.scrollLeft; });
-  window.addEventListener('mousemove', function (e) { if (!down) return; var d = e.pageX - x0; if (Math.abs(d) > 4) s.classList.add('drag'); s.scrollLeft = l0 - d; });
-  window.addEventListener('mouseup', function () { down = false; s.classList.remove('drag'); });
-  s.addEventListener('dragstart', function (e) { e.preventDefault(); });
-});
+// photos open full size, with arrows and Escape
+(function () {
+  var lb = document.querySelector('.lb'); if (!lb) return;
+  var big = lb.querySelector('img'), cap = lb.querySelector('p'), set = [], at = 0, last = null;
+  function items() { return Array.prototype.filter.call(document.querySelectorAll('[data-zoom]'), function (f) { return !f.hidden && f.getAttribute('aria-hidden') !== 'true'; }); }
+  function draw() { var im = set[at].querySelector('img'), c = set[at].querySelector('figcaption'); big.src = im.currentSrc || im.src; big.alt = im.alt; cap.textContent = c ? c.textContent : im.alt; }
+  function open(f) { set = items(); at = Math.max(0, set.indexOf(f)); last = document.activeElement; draw(); lb.hidden = false; lb.classList.add('on'); lb.querySelector('.x').focus(); }
+  function close() { lb.classList.remove('on'); lb.hidden = true; if (last && last.focus) last.focus(); }
+  function move(d) { at = (at + d + set.length) % set.length; draw(); }
+  document.addEventListener('click', function (e) {
+    var f = e.target.closest && e.target.closest('[data-zoom]');
+    if (f) { var src = f; if (f.getAttribute('aria-hidden') === 'true') { var s = f.querySelector('img').getAttribute('src'); src = items().filter(function (x) { return x.querySelector('img').getAttribute('src') === s; })[0] || f; } open(src); return; }
+    if (e.target === lb || e.target.classList.contains('x')) close();
+    else if (e.target.classList.contains('prev')) move(-1);
+    else if (e.target.classList.contains('next')) move(1);
+  });
+  document.addEventListener('keydown', function (e) { if (lb.hidden) return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') move(-1); if (e.key === 'ArrowRight') move(1); });
+})();
 
 // project filters
 (function () {
@@ -34,7 +78,7 @@ document.querySelectorAll('.strip').forEach(function (s) {
     b.addEventListener('click', function () {
       var f = b.getAttribute('data-f');
       buttons.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
-      document.querySelectorAll('.gal figure[data-g]').forEach(function (fig) { fig.hidden = !(f === 'all' || fig.getAttribute('data-g') === f); });
+      document.querySelectorAll('.gallery figure[data-g]').forEach(function (fig) { fig.hidden = !(f === 'all' || fig.getAttribute('data-g') === f); });
     });
   });
 })();
