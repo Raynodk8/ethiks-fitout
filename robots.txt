@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.ethiks.co.uk/sitemap.xml
