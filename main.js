@@ -1,6 +1,43 @@
-// Ethiks Fit-out forms. FORM_ENDPOINT is where enquiries are posted as JSON.
-// While it is empty, the form opens the visitor's own email app addressed to info@ethiks.co.uk.
+// Ethiks Fit-out. FORM_ENDPOINT is where enquiries are posted as JSON.
+// While it is empty, a form opens the visitor's own email app addressed to info@ethiks.co.uk.
 var FORM_ENDPOINT = '';
+
+// scroll rule: the green datum reads the scroll position, 1px to 1mm
+(function () {
+  var out = document.querySelector('.rule span');
+  if (!out) return;
+  function read() { out.textContent = ('0000' + Math.round(window.scrollY)).slice(-5) + ' mm'; }
+  read(); window.addEventListener('scroll', read, { passive: true });
+})();
+
+// reveal sections as they come into view
+(function () {
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('on'); }); return; }
+  var io = new IntersectionObserver(function (items) { items.forEach(function (i) { if (i.isIntersecting) { i.target.classList.add('on'); io.unobserve(i.target); } }); }, { rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function (e) { io.observe(e); });
+})();
+
+// drag the photo strip sideways with the mouse
+document.querySelectorAll('.strip').forEach(function (s) {
+  var down = false, x0 = 0, l0 = 0;
+  s.addEventListener('mousedown', function (e) { down = true; x0 = e.pageX; l0 = s.scrollLeft; });
+  window.addEventListener('mousemove', function (e) { if (!down) return; var d = e.pageX - x0; if (Math.abs(d) > 4) s.classList.add('drag'); s.scrollLeft = l0 - d; });
+  window.addEventListener('mouseup', function () { down = false; s.classList.remove('drag'); });
+  s.addEventListener('dragstart', function (e) { e.preventDefault(); });
+});
+
+// project filters
+(function () {
+  var buttons = document.querySelectorAll('.filters button');
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.getAttribute('data-f');
+      buttons.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      document.querySelectorAll('.gal figure[data-g]').forEach(function (fig) { fig.hidden = !(f === 'all' || fig.getAttribute('data-g') === f); });
+    });
+  });
+})();
 
 document.querySelectorAll('form[data-form]').forEach(function (form) {
   form.addEventListener('submit', function (e) {
